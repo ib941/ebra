@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ibrahim | Complete Solutions Center</title>
     <style>
-        /* Dark Luxury Global Theme */
+        /* Premium Dark Luxury Theme */
         body { 
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
             background-color: #0b0c10; 
@@ -19,7 +19,7 @@
 
         header { 
             text-align: center; 
-            padding: 3rem 1rem 1.5rem 1rem; 
+            padding: 3.5rem 1rem 2rem 1rem; 
             max-width: 800px;
         }
 
@@ -49,7 +49,7 @@
             margin-bottom: 4rem;
         }
 
-        /* Premium Service Cards Matrix */
+        /* Service Matrix */
         .services-grid { 
             display: grid; 
             grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -69,11 +69,10 @@
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
         }
 
-        /* Clean Hover Glows */
         .service-card:hover {
             transform: translateY(-5px);
-            border-color: #00f2fe;
-            box-shadow: 0 0 25px rgba(0, 242, 254, 0.25);
+            border-color: #10b981;
+            box-shadow: 0 0 25px rgba(16, 185, 129, 0.2);
         }
 
         .service-icon {
@@ -82,7 +81,7 @@
             display: block;
         }
 
-        /* Integrated Dark AI Chat Widget */
+        /* AI Assistant Interface */
         .chat-container { 
             background: #14161d; 
             border: 1px solid #222530;
@@ -90,7 +89,7 @@
             overflow: hidden; 
             display: flex; 
             flex-direction: column; 
-            height: 480px; 
+            height: 500px; 
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
 
@@ -129,12 +128,12 @@
             border-radius: 8px; 
             font-size: 12px; 
             outline: none; 
-            width: 160px; 
+            width: 170px; 
             transition: border-color 0.3s;
         }
         
         .key-input:focus {
-            border-color: #00f2fe;
+            border-color: #10b981;
         }
 
         .chat-history { 
@@ -164,8 +163,8 @@
         }
 
         .user-msg { 
-            background: #00f2fe; 
-            color: #0b0c10; 
+            background: #10b981; 
+            color: #ffffff; 
             font-weight: 500;
             align-self: flex-end; 
             border-bottom-right-radius: 4px;
@@ -189,8 +188,8 @@
         }
 
         .chat-input button { 
-            background: #00f2fe; 
-            color: #0b0c10; 
+            background: #10b981; 
+            color: #ffffff; 
             border: none; 
             padding: 0 1.75rem; 
             border-radius: 10px;
@@ -203,7 +202,6 @@
             opacity: 0.9;
         }
 
-        /* Custom WhatsApp Button Element */
         .whatsapp-wrapper {
             display: flex;
             justify-content: center;
@@ -257,13 +255,13 @@
         <div class="chat-container">
             <div class="chat-header">
                 <span>AI Business Assistant</span>
-                <input type="password" id="apiKeySlot" class="key-input" placeholder="Paste Gemini API Key...">
+                <input type="password" id="apiSecretKey" class="key-input" placeholder="Paste Gemini API Key...">
             </div>
-            <div class="chat-history" id="chatHistory">
+            <div class="chat-history" id="chatBox">
                 <div class="message bot-msg">Hi! I'm Ibrahim's AI assistant. Ask me about his services, his portfolio, or setting up a Google Meet!</div>
             </div>
             <div class="chat-input">
-                <input type="text" id="userInput" placeholder="Type your message...">
+                <input type="text" id="userMessage" placeholder="Type your message...">
                 <button id="sendBtn">Send</button>
             </div>
         </div>
@@ -277,86 +275,88 @@
 
     <script>
         const sendBtn = document.getElementById('sendBtn');
-        const userInput = document.getElementById('userInput');
-        const chatHistory = document.getElementById('chatHistory');
-        const apiKeySlot = document.getElementById('apiKeySlot');
+        const userMessage = document.getElementById('userMessage');
+        const chatBox = document.getElementById('chatBox');
+        const apiSecretKey = document.getElementById('apiSecretKey');
 
-        if (localStorage.getItem('my_saved_key')) {
-            apiKeySlot.value = localStorage.getItem('my_saved_key');
+        // Restore saved key securely if it exists
+        if (localStorage.getItem('saved_gemini_token')) {
+            apiSecretKey.value = localStorage.getItem('saved_gemini_token');
         }
 
-        apiKeySlot.addEventListener('input', () => {
-            localStorage.setItem('my_saved_key', apiKeySlot.value);
+        apiSecretKey.addEventListener('input', () => {
+            localStorage.setItem('saved_gemini_token', apiSecretKey.value);
         });
 
-        const corePersona = `You are the digital assistant for Ibrahim, a professional graphic designer and e-commerce manager who acts as a complete solutions center for his clients. Your goal is to answer client questions politely, professionally, and concisely. 
+        const systemPersona = `You are the digital assistant for Ibrahim, a professional graphic designer and e-commerce manager who acts as a complete solutions center for his clients. Answer client queries concisely and professionally.
 
-        Services: If asked about work, explain that Ibrahim specializes in high-end product photography (frequently working with perfume manufacturing clients), building and managing Salla e-commerce stores, and creating digital product designs and social media posters.
+        Services: Ibrahim provides end-to-end solutions including commercial product photography (especially for perfume lines), building/structuring premium Salla e-commerce stores, and graphic design for promotional social media posters.
 
-        Personal Life: If asked about his free time, casually mention that as the oldest sibling, he values spending time chatting with his family and friends. He also relaxes by watching football—especially following FC Barcelona and AC Milan—and playing video games like eFootball, Hollow Knight, and Sky: Children of the Light.
+        Availability & Meetings: If a client requests an in-person meeting, call, or consultation, politely inform them that Ibrahim coordinates all strategic discovery sessions exclusively via Google Meet. Ask them what times work best for their schedule.
 
-        Meetings: If a client asks for a meeting, phone call, or in-person meetup, politely inform them that Ibrahim conducts all client consultations exclusively via Google Meet. Ask them what day works best and let them know Ibrahim will send a Google Meet link.
+        Interests: If casually asked about his personality or free time, you can warmly share that he is the eldest sibling in his family, enjoys keeping up with football matches (specifically cheering for FC Barcelona and AC Milan), and plays games like eFootball, Hollow Knight, and Sky: Children of the Light.
 
-        Always be friendly. Do not invent any details. Respond in the same language the user uses.`;
+        Respond in the language the client uses. Be helpful, clean, and professional.`;
 
-        let chatLog = [];
+        let conversationHistory = [];
 
         sendBtn.addEventListener('click', async () => {
-            const query = userInput.value.trim();
-            const apiKey = apiKeySlot.value.trim();
+            const textInput = userMessage.value.trim();
+            const token = apiSecretKey.value.trim();
             
-            if (!query) return;
-            if (!apiKey) {
-                alert("Please paste your Gemini API Key in the top-right corner slot of the chat widget first!");
+            if (!textInput) return;
+            if (!token) {
+                alert("Please add your Gemini API Key in the top-right field of the chat window.");
                 return;
             }
             
-            chatHistory.innerHTML += `<div class="message user-msg">${query}</div>`;
-            userInput.value = '';
-            chatHistory.scrollTop = chatHistory.scrollHeight;
+            // Render user message immediately
+            chatBox.innerHTML += `<div class="message user-msg">${textInput}</div>`;
+            userMessage.value = '';
+            chatBox.scrollTop = chatBox.scrollHeight;
 
-            const thinkingDiv = document.createElement('div');
-            thinkingDiv.className = 'message bot-msg';
-            thinkingDiv.innerText = 'Thinking...';
-            chatHistory.appendChild(thinkingDiv);
-            chatHistory.scrollTop = chatHistory.scrollHeight;
+            // Render thinking placeholder
+            const fallbackDiv = document.createElement('div');
+            fallbackDiv.className = 'message bot-msg';
+            fallbackDiv.innerText = 'Thinking...';
+            chatBox.appendChild(fallbackDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
 
-            chatLog.push({ role: "user", parts: [{ text: query }] });
-
-            // Packaging everything natively into the standard contents parameter array
-            let cleanPayload = JSON.parse(JSON.stringify(chatLog));
-            if (cleanPayload.length > 0) {
-                cleanPayload[0].parts[0].text = `[SYSTEM CORE DIRECTION: ${corePersona}]\n\nClient Input: ${cleanPayload[0].parts[0].text}`;
-            }
+            // Track state
+            conversationHistory.push({ role: "user", parts: [{ text: textInput }] });
 
             try {
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+                // Utilizing the fully supported v1beta endpoint with system instruction capabilities
+                const apiResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${token}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        contents: cleanPayload
+                        contents: conversationHistory,
+                        systemInstruction: {
+                            parts: [{ text: systemPersona }]
+                        }
                     })
                 });
 
-                const data = await response.json();
+                const structuralData = await apiResponse.json();
 
-                if (!response.ok) {
-                    thinkingDiv.style.color = "#ef4444";
-                    thinkingDiv.innerText = `Error: ${data.error ? data.error.message : 'Connection restriction'}`;
+                if (!apiResponse.ok) {
+                    fallbackDiv.style.color = "#ef4444";
+                    fallbackDiv.innerText = `Error: ${structuralData.error ? structuralData.error.message : 'Failed payload verification.'}`;
                     return;
                 }
 
-                const aiText = data.candidates[0].content.parts[0].text;
-                thinkingDiv.innerText = aiText;
-                chatLog.push({ role: "model", parts: [{ text: aiText }] });
+                const outputResponse = structuralData.candidates[0].content.parts[0].text;
+                fallbackDiv.innerText = outputResponse;
+                conversationHistory.push({ role: "model", parts: [{ text: outputResponse }] });
 
-            } catch (error) {
-                thinkingDiv.style.color = "#ef4444";
-                thinkingDiv.innerText = "Network connection failed. Verify internet connection.";
+            } catch (failReason) {
+                fallbackDiv.style.color = "#ef4444";
+                fallbackDiv.innerText = "Network connection timeout. Please try again.";
             }
             
-            chatHistory.scrollTop = chatHistory.scrollHeight;
+            chatBox.scrollTop = chatBox.scrollHeight;
         });
-    </script>
+    </style>
 </body>
 </html>
