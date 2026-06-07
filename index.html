@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ibrahim | Complete Design Solutions</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f9; color: #333; margin: 0; padding: 0; }
+        header { background-color: #1a1a1a; color: white; padding: 2rem; text-align: center; }
+        .container { max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
+        .services { display: flex; gap: 1rem; margin-bottom: 2rem; }
+        .service-card { background: white; padding: 1rem; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); flex: 1; text-align: center; }
+        .chat-container { background: white; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); overflow: hidden; display: flex; flex-direction: column; height: 400px; }
+        .chat-header { background: #0056b3; color: white; padding: 1rem; font-weight: bold; }
+        .chat-history { flex: 1; padding: 1rem; overflow-y: auto; background: #fafafa; display: flex; flex-direction: column; gap: 10px; }
+        .message { padding: 10px; border-radius: 8px; max-width: 80%; }
+        .bot-msg { background: #e9ecef; align-self: flex-start; }
+        .user-msg { background: #0056b3; color: white; align-self: flex-end; }
+        .chat-input { display: flex; border-top: 1px solid #ddd; }
+        .chat-input input { flex: 1; padding: 1rem; border: none; outline: none; }
+        .chat-input button { background: #0056b3; color: white; border: none; padding: 0 1.5rem; cursor: pointer; font-weight: bold; }
+        .chat-input button:hover { background: #004494; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Ibrahim</h1>
+        <p>Complete Solutions Center | Salla Stores • Photography • Design</p>
+    </header>
+
+    <div class="container">
+        <div class="services">
+            <div class="service-card">📸 Product Photography</div>
+            <div class="service-card">🛒 Salla Store Setup</div>
+            <div class="service-card">🎨 Social Media Posters</div>
+        </div>
+
+        <div class="chat-container">
+            <div class="chat-header">Chat with Ibrahim's AI Assistant</div>
+            <div class="chat-history" id="chatHistory">
+                <div class="message bot-msg">Hi! I'm Ibrahim's AI assistant. Ask me about his services, his portfolio, or setting up a Google Meet!</div>
+            </div>
+            <div class="chat-input">
+                <input type="text" id="userInput" placeholder="Type your message...">
+                <button id="sendBtn">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // We will add the AI connection logic here in Phase 3!
+        const sendBtn = document.getElementById('sendBtn');
+        const userInput = document.getElementById('userInput');
+        const chatHistory = document.getElementById('chatHistory');
+
+        sendBtn.addEventListener('click', () => {
+            const text = userInput.value;
+            if(!text) return;
+            
+            // Add user message to screen
+            chatHistory.innerHTML += `<div class="message user-msg">${text}</div>`;
+            userInput.value = '';
+            
+            // Temporary placeholder response until we plug in the real AI
+            setTimeout(() => {
+                chatHistory.innerHTML += `<div class="message bot-msg">I am currently being upgraded! My AI brain will be connected shortly.</div>`;
+                chatHistory.scrollTop = chatHistory.scrollHeight;
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
