@@ -81,127 +81,6 @@
             display: block;
         }
 
-        /* AI Assistant Interface */
-        .chat-container { 
-            background: #14161d; 
-            border: 1px solid #222530;
-            border-radius: 16px; 
-            overflow: hidden; 
-            display: flex; 
-            flex-direction: column; 
-            height: 500px; 
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        }
-
-        .chat-header { 
-            background: #1c1e27; 
-            border-bottom: 1px solid #222530;
-            padding: 1.25rem; 
-            font-weight: 600; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-        }
-
-        .chat-header span {
-            color: #ffffff;
-            font-size: 0.95rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .chat-header span::before {
-            content: '';
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            background-color: #10b981;
-            border-radius: 50%;
-        }
-
-        .key-input { 
-            background: #0b0c10; 
-            border: 1px solid #2d313f; 
-            color: #ffffff; 
-            padding: 6px 12px; 
-            border-radius: 8px; 
-            font-size: 12px; 
-            outline: none; 
-            width: 170px; 
-            transition: border-color 0.3s;
-        }
-        
-        .key-input:focus {
-            border-color: #10b981;
-        }
-
-        .chat-history { 
-            flex: 1; 
-            padding: 1.25rem; 
-            overflow-y: auto; 
-            background: #0f1015; 
-            display: flex; 
-            flex-direction: column; 
-            gap: 12px; 
-        }
-
-        .message { 
-            padding: 12px 16px; 
-            border-radius: 14px; 
-            max-width: 75%; 
-            line-height: 1.5; 
-            font-size: 0.95rem;
-        }
-
-        .bot-msg { 
-            background: #1c1e27; 
-            color: #e5e7eb;
-            align-self: flex-start; 
-            border-bottom-left-radius: 4px;
-            border: 1px solid #222530;
-        }
-
-        .user-msg { 
-            background: #10b981; 
-            color: #ffffff; 
-            font-weight: 500;
-            align-self: flex-end; 
-            border-bottom-right-radius: 4px;
-        }
-
-        .chat-input { 
-            display: flex; 
-            background: #1c1e27;
-            border-top: 1px solid #222530; 
-            padding: 8px;
-        }
-
-        .chat-input input { 
-            flex: 1; 
-            padding: 1rem; 
-            background: transparent;
-            border: none; 
-            outline: none; 
-            color: #ffffff;
-            font-size: 0.95rem;
-        }
-
-        .chat-input button { 
-            background: #10b981; 
-            color: #ffffff; 
-            border: none; 
-            padding: 0 1.75rem; 
-            border-radius: 10px;
-            cursor: pointer; 
-            font-weight: 600; 
-            transition: opacity 0.2s;
-        }
-
-        .chat-input button:hover { 
-            opacity: 0.9;
-        }
-
         .whatsapp-wrapper {
             display: flex;
             justify-content: center;
@@ -252,20 +131,6 @@
             </div>
         </div>
 
-        <div class="chat-container">
-            <div class="chat-header">
-                <span>AI Business Assistant</span>
-                <input type="password" id="apiSecretKey" class="key-input" placeholder="Paste Gemini API Key...">
-            </div>
-            <div class="chat-history" id="chatBox">
-                <div class="message bot-msg">Hi! I'm Ibrahim's AI assistant. Ask me about his services, his portfolio, or setting up a Google Meet!</div>
-            </div>
-            <div class="chat-input">
-                <input type="text" id="userMessage" placeholder="Type your message...">
-                <button id="sendBtn">Send</button>
-            </div>
-        </div>
-
         <div class="whatsapp-wrapper">
             <a href="https://wa.me/966534657849" target="_blank" class="whatsapp-btn">
                 <span>Chat on WhatsApp</span>
@@ -273,59 +138,7 @@
         </div>
     </div>
 
-    <script>
-        const sendBtn = document.getElementById('sendBtn');
-        const userMessage = document.getElementById('userMessage');
-        const chatBox = document.getElementById('chatBox');
-        const apiSecretKey = document.getElementById('apiSecretKey');
-
-        // Restore saved key securely if it exists
-        if (localStorage.getItem('saved_gemini_token')) {
-            apiSecretKey.value = localStorage.getItem('saved_gemini_token');
-        }
-
-        apiSecretKey.addEventListener('input', () => {
-            localStorage.setItem('saved_gemini_token', apiSecretKey.value);
-        });
-
-        const systemPersona = `You are the digital assistant for Ibrahim, a professional graphic designer and e-commerce manager who acts as a complete solutions center for his clients. Answer client queries concisely and professionally.
-
-        Services: Ibrahim provides end-to-end solutions including commercial product photography (especially for perfume lines), building/structuring premium Salla e-commerce stores, and graphic design for promotional social media posters.
-
-        Availability & Meetings: If a client requests an in-person meeting, call, or consultation, politely inform them that Ibrahim coordinates all strategic discovery sessions exclusively via Google Meet. Ask them what times work best for their schedule.
-
-        Interests: If casually asked about his personality or free time, you can warmly share that he is the eldest sibling in his family, enjoys keeping up with football matches (specifically cheering for FC Barcelona and AC Milan), and plays games like eFootball, Hollow Knight, and Sky: Children of the Light.
-
-        Respond in the language the client uses. Be helpful, clean, and professional.`;
-
-        let conversationHistory = [];
-
-        async function handleSendMessage() {
-            const textInput = userMessage.value.trim();
-            const token = apiSecretKey.value.trim();
-            
-            if (!textInput) return;
-            if (!token) {
-                alert("Please add your Gemini API Key in the top-right field of the chat window.");
-                return;
-            }
-            
-            // Render user message immediately
-            chatBox.innerHTML += `<div class="message user-msg">${textInput}</div>`;
-            userMessage.value = '';
-            chatBox.scrollTop = chatBox.scrollHeight;
-
-            // Render thinking placeholder
-            const fallbackDiv = document.createElement('div');
-            fallbackDiv.className = 'message bot-msg';
-            fallbackDiv.innerText = 'Thinking...';
-            chatBox.appendChild(fallbackDiv);
-            chatBox.scrollTop = chatBox.scrollHeight;
-
-            // Track state
-            conversationHistory.push({ role: "user", parts: [{ text: textInput }] });
-
-          <script type="text/javascript">
+    <script type="text/javascript">
       (function(d, t) {
           var v = d.createElement(t), s = d.getElementsByTagName(t)[0];
           v.onload = function() {
@@ -339,6 +152,6 @@
           }
           v.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs"; v.type = "text/javascript"; s.parentNode.insertBefore(v, s);
       })(document, 'script');
-</script>
-  </body>
+    </script>
+</body>
 </html>
