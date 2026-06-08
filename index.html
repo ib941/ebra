@@ -49,36 +49,94 @@
             margin-bottom: 4rem;
         }
 
-        /* Service Matrix */
-        .services-grid { 
-            display: grid; 
+        /* Container for the cards grid */
+        .services-grid {
+            display: grid;
             grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
             gap: 1.25rem; 
         }
 
-        .service-card { 
-            background: #14161d; 
-            border: 1px solid #222530;
-            padding: 2.5rem 1.5rem; 
-            border-radius: 16px; 
-            text-align: center; 
-            font-weight: 600; 
-            font-size: 1.1rem;
+        /* Base Card Styling */
+        .card {
+            position: relative;
+            height: 380px;
+            border-radius: 16px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 25px;
+            border: 1px solid rgba(0, 229, 147, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            box-sizing: border-box;
+        }
+
+        /* Dark elegant overlay so text is easy to read over your photos */
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to top, rgba(10, 10, 10, 0.95) 30%, rgba(10, 10, 10, 0.4) 100%);
+            z-index: 1;
+            transition: background 0.3s ease;
+        }
+
+        /* Assigning your exact uploaded file names to each card */
+        .card.photography-card {
+            background-image: url('photography.jpg.png');
+        }
+
+        .card.salla-card {
+            background-image: url('salla.jpg.png');
+        }
+
+        .card.poster-card {
+            background-image: url('poster.jpg.png');
+        }
+
+        /* Hover Effects to make it pop */
+        .card:hover {
+            transform: translateY(-8px);
+            border-color: #00e593;
+            box-shadow: 0 15px 35px rgba(0, 229, 147, 0.15);
+        }
+
+        .card:hover::before {
+            background: linear-gradient(to top, rgba(10, 10, 10, 0.98) 40%, rgba(10, 10, 10, 0.2) 100%);
+        }
+
+        /* Text setups inside the image cards */
+        .card h3, .card p, .card .icon {
+            position: relative;
+            z-index: 2;
+            margin: 0;
             color: #ffffff;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            text-align: left;
         }
 
-        .service-card:hover {
-            transform: translateY(-5px);
-            border-color: #10b981;
-            box-shadow: 0 0 25px rgba(16, 185, 129, 0.2);
+        .card .icon {
+            font-size: 2rem;
+            margin-bottom: auto;
         }
 
-        .service-icon {
-            font-size: 1.75rem;
-            margin-bottom: 0.75rem;
-            display: block;
+        .card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            font-size: 0.95rem;
+            color: #b3b3b3;
+            line-height: 1.4;
+            font-weight: 400;
         }
 
         .whatsapp-wrapper {
@@ -117,17 +175,22 @@
 
     <div class="container">
         <div class="services-grid">
-            <div class="service-card">
-                <span class="service-icon">📸</span>
-                Product Photography
+            <div class="card photography-card">
+                <div class="icon">📸</div>
+                <h3>Product Photography</h3>
+                <p>High-end commercial & luxury product shots designed to tell a brand story.</p>
             </div>
-            <div class="service-card">
-                <span class="service-icon">🛒</span>
-                Salla Store Setup
+
+            <div class="card salla-card">
+                <div class="icon">🛒</div>
+                <h3>Salla Store Setup</h3>
+                <p>Professional end-to-end e-commerce configurations and custom layout optimization.</p>
             </div>
-            <div class="service-card">
-                <span class="service-icon">🎨</span>
-                Social Media Posters
+
+            <div class="card poster-card">
+                <div class="icon">🎨</div>
+                <h3>Poster Design</h3>
+                <p>Dynamic, premium social media posters and tailored promotional graphics.</p>
             </div>
         </div>
 
